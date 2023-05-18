@@ -8,6 +8,7 @@ void menu(){
       printf("2 - Remove produto\n");
       printf("3 - Buscar produto na arvore\n");
       printf("4 - Mostrar todos os produtos\n");
+      printf("5 - Remover todos os produtos da árvore\n");
       printf("7 - Sair\n");
       printf("Entre com a opcao desejada: \n");
 }
@@ -43,4 +44,15 @@ void exibirProdutos(noarv* raiz){
         printf("--------------------\n");
         exibirProdutos(raiz->direita);
     }
+}
+
+noarv * limparArvore(noarv* raiz) {
+  if (raiz->esquerda != NULL) {
+    raiz->esquerda =  limparArvore(raiz->esquerda);
+  }
+  if (raiz->direita != NULL) {
+    raiz->direita = limparArvore(raiz->direita);
+  }
+  free(raiz);
+  return NULL;
 }

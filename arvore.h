@@ -16,6 +16,7 @@ noarv* criarNo(produto Produto);
 noarv* inserirProduto(noarv* raiz, produto Produto);
 void exibirProdutos(noarv* raiz);
 
+noarv * limparArvore (noarv* raiz);
 /*
 
 

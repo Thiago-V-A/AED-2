@@ -44,8 +44,14 @@ int main(){
 			printf("--------------------\n");
 			exibirProdutos(arvore);
 			break;
+
+        case 5:
+            arvore = limparArvore(arvore);
+            printf("A arvore foi reinicializada");
+            break;
 		
-        case 7: 
+        case 7:
+            arvore = limparArvore(arvore);
             printf("\nObrigado por usar nosso programa\n");
             break;
             
