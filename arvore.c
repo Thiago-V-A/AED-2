@@ -8,33 +8,36 @@ void menu(){
       printf("2 - Remove produto\n");
       printf("3 - Buscar produto na arvore\n");
       printf("4 - Mostrar todos os produtos\n");
-      printf("5 - Remover todos os produtos da árvore\n");
       printf("7 - Sair\n");
       printf("Entre com a opcao desejada: \n");
 }
 
-noarv* criarNo(produto Produto){
-    noarv* novoNo = (noarv*)malloc(sizeof(noarv));
+Arvore* criarNo(produto Produto){
+    Arvore* novoNo = (Arvore*)malloc(sizeof(Arvore));
     novoNo->p = Produto;
     novoNo->esquerda = NULL;
     novoNo->direita = NULL;
     return novoNo;
 }
 
-noarv* inserirProduto(noarv* raiz, produto Produto){
-    if (raiz == NULL)
+Arvore* inserirProduto(Arvore* raiz, produto Produto){
+    if (!raiz)
         return criarNo(Produto);
 
-    if (Produto.codigo < raiz->p.codigo)
-		raiz->esquerda = inserirProduto(raiz->esquerda, Produto);
+    else{
+		if (Produto.codigo < raiz->p.codigo)
+			raiz->esquerda = inserirProduto(raiz->esquerda, Produto);
 		
-    else if (Produto.codigo > raiz->p.codigo)
-		raiz->direita = inserirProduto(raiz->direita, Produto);
-    
+		else if (Produto.codigo > raiz->p.codigo)
+			raiz->direita = inserirProduto(raiz->direita, Produto);
+	
+	raiz = fbArvore(raiz);
+	}
     return raiz;
+	
 }
 
-void exibirProdutos(noarv* raiz){
+void exibirProdutos(Arvore* raiz){
     if (raiz != NULL) {
         exibirProdutos(raiz->esquerda);
         printf("Codigo: %d\n", raiz->p.codigo);
@@ -46,13 +49,52 @@ void exibirProdutos(noarv* raiz){
     }
 }
 
-noarv * limparArvore(noarv* raiz) {
-  if (raiz->esquerda != NULL) {
-    raiz->esquerda =  limparArvore(raiz->esquerda);
-  }
-  if (raiz->direita != NULL) {
-    raiz->direita = limparArvore(raiz->direita);
-  }
-  free(raiz);
-  return NULL;
+int altura(Arvore *arvore){ 
+    if(!arvore)
+        return -1;
+        
+    int altura_esq = altura(arvore->esquerda), altura_dir = altura(arvore->direita);
+    if(altura_esq > altura_dir)
+        return altura_esq + 1;
+    else
+        return altura_dir + 1;
+}
+
+int fatorB(Arvore *arvore){
+    return altura(arvore->direita) - altura(arvore->esquerda);
+}
+
+Arvore* rotacao_E(Arvore *arvore){
+    Arvore *tmp = arvore->direita;
+    arvore->direita = tmp->esquerda;
+    tmp->esquerda = tmp;
+    return tmp;
+}
+
+Arvore* rotacao_D(Arvore *arvore){
+    Arvore *tmp = arvore->esquerda;
+    arvore->esquerda = tmp->direita;
+    tmp->direita = arvore;
+    return tmp;
+}
+
+Arvore* fbArvore(Arvore *arvore){
+
+    int fb = fatorB(arvore); 
+    int fbAux;
+
+    if(fb<-1){
+		fbAux = fatorB(arvore->esquerda);
+        if(fbAux > 0)
+            arvore->esquerda =  rotacao_E(arvore->esquerda);
+        arvore = rotacao_D(arvore);
+        
+    }else if (fb > 1){
+		fbAux = fatorB(arvore->direita);
+        if(fbAux < 0)
+            arvore->direita = rotacao_D(arvore->direita);
+        arvore = rotacao_E(arvore);
+    }
+    
+    return arvore;
 }
