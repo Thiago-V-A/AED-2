@@ -5,37 +5,33 @@ typedef struct produto{
     char nome[100];
 }produto;
 
-typedef struct noarv{
+typedef struct Arvore{
     produto p;
-    struct noarv* direita;
-    struct noarv* esquerda;
-}noarv;
+    struct Arvore* direita;
+    struct Arvore* esquerda;
+}Arvore;
 
 void menu();
-noarv* criarNo(produto Produto);
-noarv* inserirProduto(noarv* raiz, produto Produto);
-void exibirProdutos(noarv* raiz);
+Arvore* criarNo(produto Produto);
+Arvore* inserirProduto(Arvore* raiz, produto Produto);
+void exibirProdutos(Arvore* raiz);
+Arvore* fbArvore(Arvore *arvore);
+int altura(Arvore *arvore);
+int fatorB(Arvore *arvore);
+Arvore* rotacao_E(Arvore *arvore);
+Arvore* rotacao_D(Arvore *arvore);
 
-noarv * limparArvore (noarv* raiz);
 /*
 
 
 
 FUNÇÕES NECESSÁRIAS 
-noarv* RemoverProduto(noarv* arvore, int c); // Remoção do produto da árvore
-void buscarProduto(noarv* arvore, int c); // Buscar os produtos na arvore
-void posfixo(noarv* arvore); // Apresenta a sequência na ordem posfixa
-void infixo(noarv* arvore); // Apresenta a sequência na ordem infixa
-void prefixo(noarv* arvore); // Apresenta a sequência na ordem prefixa
-void altura(noarv* arvore);
-
-
-FUNÇÕES PARA O BALANCEAMENTO FB(FATOR DE BALANCEAMENTO FB = ALT_ESQ - ALT_DIR)
-No *rotacionarEsquerda();
-No *rotacionarDireita();
-No *balancemento();
-No *atualizarAltura();
-No *limpaArvore();
+Arvore* RemoverProduto(Arvore* arvore, int c); // Remoção do produto da árvore
+void buscarProduto(Arvore* arvore, int c); // Buscar os produtos na arvore
+void posfixo(Arvore* arvore); // Apresenta a sequência na ordem posfixa
+void infixo(Arvore* arvore); // Apresenta a sequência na ordem infixa
+void prefixo(Arvore* arvore); // Apresenta a sequência na ordem prefixa
+void altura(Arvore* arvore);
 
 
 
