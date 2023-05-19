@@ -98,3 +98,14 @@ Arvore* fbArvore(Arvore *arvore){
     
     return arvore;
 }
+
+Arvore * limparSubarvore(Arvore * subarvore) {
+    if (subarvore->esquerda != NULL) {
+        subarvore->esquerda =  limparArvore(subarvore->esquerda);
+    }
+    if (subarvore->direita != NULL) {
+        subarvore->direita = limparArvore(subarvore->direita);
+    }
+    free(subraiz);
+    return NULL;
+}

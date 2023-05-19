@@ -8,6 +8,7 @@ void menu(){
       printf("2 - Remove produto\n");
       printf("3 - Buscar produto na arvore\n");
       printf("4 - Mostrar todos os produtos\n");
+      printf("5 - Limpar/reinicializar arvore\n");
       printf("7 - Sair\n");
       printf("Entre com a opcao desejada: \n");
 }

@@ -20,12 +20,10 @@ int altura(Arvore *arvore);
 int fatorB(Arvore *arvore);
 Arvore* rotacao_E(Arvore *arvore);
 Arvore* rotacao_D(Arvore *arvore);
+Arvore * limparSubarvore(Arvore * subarvore);
 
 /*
-
-
-
-FUNÇÕES NECESSÁRIAS 
+FUNÇÕES NECESSÁRIAS
 Arvore* RemoverProduto(Arvore* arvore, int c); // Remoção do produto da árvore
 void buscarProduto(Arvore* arvore, int c); // Buscar os produtos na arvore
 void posfixo(Arvore* arvore); // Apresenta a sequência na ordem posfixa
