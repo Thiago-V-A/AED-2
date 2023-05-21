@@ -1,36 +1,30 @@
-typedef struct produto{
-    int codigo;
-    float preco;
-    int estoque;
-    char nome[100];
-}produto;
+#include "produto.c"
+#ifndef AED_2_ARVORE_H
+#define AED_2_ARVORE_H
 
-typedef struct Arvore{
-    produto p;
-    struct Arvore* direita;
-    struct Arvore* esquerda;
-}Arvore;
+typedef struct NO_DE_ARVORE{
+    PRODUTO produto;
+    struct NO_DE_ARVORE* direita;
+    struct NO_DE_ARVORE* esquerda;
+}NO_DE_ARVORE;
 
-void menu();
-Arvore* criarNo(produto Produto);
-Arvore* inserirProduto(Arvore* raiz, produto Produto);
-void exibirProdutos(Arvore* raiz);
-Arvore* fbArvore(Arvore *arvore);
-int altura(Arvore *arvore);
-int fatorB(Arvore *arvore);
-Arvore* rotacao_E(Arvore *arvore);
-Arvore* rotacao_D(Arvore *arvore);
-Arvore * limparSubarvore(Arvore * subarvore);
+NO_DE_ARVORE * inserirProduto(NO_DE_ARVORE* raiz, PRODUTO produto);
 
-/*
-FUNÇÕES NECESSÁRIAS
-Arvore* RemoverProduto(Arvore* arvore, int c); // Remoção do produto da árvore
-void buscarProduto(Arvore* arvore, int c); // Buscar os produtos na arvore
-void posfixo(Arvore* arvore); // Apresenta a sequência na ordem posfixa
-void infixo(Arvore* arvore); // Apresenta a sequência na ordem infixa
-void prefixo(Arvore* arvore); // Apresenta a sequência na ordem prefixa
-void altura(Arvore* arvore);
+void exibirTodosProdutos(NO_DE_ARVORE* raiz);
 
+NO_DE_ARVORE * balancearSubarvore(NO_DE_ARVORE *subarvore);
 
+long int verificarAltura(NO_DE_ARVORE *subarvore);
+int calcularFatorDeBalanceamento(NO_DE_ARVORE *subarvore);
 
-*/
+NO_DE_ARVORE * rotacao_E(NO_DE_ARVORE *subarvore);
+NO_DE_ARVORE * rotacao_D(NO_DE_ARVORE *subarvore);
+
+void imprimePrefixa(NO_DE_ARVORE *noDeArvore);
+void imprimeInfixa(NO_DE_ARVORE *raiz);
+void imprimePosfixa(NO_DE_ARVORE *raiz);
+
+NO_DE_ARVORE * buscarElemento(NO_DE_ARVORE * raiz, long unsigned int codigo);
+NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore);
+
+#endif //AED_2_ARVORE_H

@@ -3,109 +3,214 @@
 #include <string.h>
 #include "arvore.h"
 
-void menu(){ 
-      printf("1 - Cadastrar novo produto\n");
-      printf("2 - Remove produto\n");
-      printf("3 - Buscar produto na arvore\n");
-      printf("4 - Mostrar todos os produtos\n");
-      printf("7 - Sair\n");
-      printf("Entre com a opcao desejada: \n");
-}
+NO_DE_ARVORE* inserirProduto(NO_DE_ARVORE* raiz, PRODUTO produto){
+    // Insere, recursivamente, um novo produto na árvore AVL
 
-Arvore* criarNo(produto Produto){
-    Arvore* novoNo = (Arvore*)malloc(sizeof(Arvore));
-    novoNo->p = Produto;
-    novoNo->esquerda = NULL;
-    novoNo->direita = NULL;
-    return novoNo;
-}
-
-Arvore* inserirProduto(Arvore* raiz, produto Produto){
-    if (!raiz)
-        return criarNo(Produto);
-
-    else{
-		if (Produto.codigo < raiz->p.codigo)
-			raiz->esquerda = inserirProduto(raiz->esquerda, Produto);
-		
-		else if (Produto.codigo > raiz->p.codigo)
-			raiz->direita = inserirProduto(raiz->direita, Produto);
-	
-	raiz = fbArvore(raiz);
-	}
-    return raiz;
-	
-}
-
-void exibirProdutos(Arvore* raiz){
-    if (raiz != NULL) {
-        exibirProdutos(raiz->esquerda);
-        printf("Codigo: %d\n", raiz->p.codigo);
-        printf("Nome: %s", raiz->p.nome);
-        printf("Preco: %.2f\n", raiz->p.preco);
-        printf("Quantidade: %d\n", raiz->p.estoque);
-        printf("--------------------\n");
-        exibirProdutos(raiz->direita);
+    // Se a função alcançar NULL após ser apontada pelo nó anterior, cria um novo nó filho e o retorna para a função anterior;
+    if (raiz == NULL) {
+        NO_DE_ARVORE* novoNo = (NO_DE_ARVORE*)malloc(sizeof(NO_DE_ARVORE));
+        novoNo->produto = produto;
+        novoNo->esquerda = NULL;
+        novoNo->direita = NULL;
+        return novoNo;
+        // Se um novo nó é inserido, a função se encerra aqui e volta à cadeia recursiva
     }
+
+    // Caso o nó já esteja preenchido
+    // Se for menor, tenta adicionar ao filho da esquerda
+    if (produto.codigo < raiz->produto.codigo)
+        raiz->esquerda = inserirProduto(raiz->esquerda, produto);
+
+    // Se maior, tenta adicionar ao filho da direita
+    else if (produto.codigo > raiz->produto.codigo)
+        raiz->direita = inserirProduto(raiz->direita, produto);
+
+    // Caso necessário, balanceia a subárvore
+    raiz = balancearSubarvore(raiz);
+    return raiz;
 }
 
-int altura(Arvore *arvore){ 
-    if(!arvore)
+long int verificarAltura(NO_DE_ARVORE *subarvore){
+    if(subarvore == NULL) {
         return -1;
-        
-    int altura_esq = altura(arvore->esquerda), altura_dir = altura(arvore->direita);
+    }
+
+    // Verifica, de forma recursiva, a altura das subárvores à esquerda e à direita
+    int altura_esq = verificarAltura(subarvore->esquerda);
+    int altura_dir = verificarAltura(subarvore->direita);
+
+    // Utiliza o valor da subárvore (esquerda/direita) mais alta;
     if(altura_esq > altura_dir)
         return altura_esq + 1;
     else
         return altura_dir + 1;
 }
 
-int fatorB(Arvore *arvore){
-    return altura(arvore->direita) - altura(arvore->esquerda);
+int calcularFatorDeBalanceamento(NO_DE_ARVORE *subarvore){
+    // Calcula o valor do fator de balancemento, descrito pela fórmula
+    // (altura da subàrvore à direita) - (altura da subàrvore à esquerda)
+
+    return verificarAltura(subarvore->direita) - verificarAltura(subarvore->esquerda);
 }
 
-Arvore* rotacao_E(Arvore *arvore){
-    Arvore *tmp = arvore->direita;
-    arvore->direita = tmp->esquerda;
-    tmp->esquerda = tmp;
+NO_DE_ARVORE* rotacao_E(NO_DE_ARVORE *subarvore){
+    NO_DE_ARVORE *tmp = subarvore->direita;
+    subarvore->direita = tmp->esquerda;
+    tmp->esquerda = subarvore;
     return tmp;
 }
 
-Arvore* rotacao_D(Arvore *arvore){
-    Arvore *tmp = arvore->esquerda;
-    arvore->esquerda = tmp->direita;
-    tmp->direita = arvore;
+NO_DE_ARVORE* rotacao_D(NO_DE_ARVORE *subarvore){
+    NO_DE_ARVORE *tmp = subarvore->esquerda;
+    subarvore->esquerda = tmp->direita;
+    tmp->direita = subarvore;
     return tmp;
 }
 
-Arvore* fbArvore(Arvore *arvore){
-
-    int fb = fatorB(arvore); 
+NO_DE_ARVORE* balancearSubarvore(NO_DE_ARVORE *subarvore){
+    // Calcula o fator de balanceamento da subárvore
+    int fb = calcularFatorDeBalanceamento(subarvore);
     int fbAux;
 
-    if(fb<-1){
-		fbAux = fatorB(arvore->esquerda);
+    // Caso a subárvore à esquerda esteja desbalanceada
+    if (fb < -1){
+		fbAux = calcularFatorDeBalanceamento(subarvore->esquerda);
         if(fbAux > 0)
-            arvore->esquerda =  rotacao_E(arvore->esquerda);
-        arvore = rotacao_D(arvore);
-        
-    }else if (fb > 1){
-		fbAux = fatorB(arvore->direita);
+            subarvore->esquerda =  rotacao_E(subarvore->esquerda);
+        subarvore = rotacao_D(subarvore);
+
+    // Caso a subárvore à direita esteja desbalanceada
+    } else if (fb > 1) {
+		fbAux = calcularFatorDeBalanceamento(subarvore->direita);
         if(fbAux < 0)
-            arvore->direita = rotacao_D(arvore->direita);
-        arvore = rotacao_E(arvore);
+            subarvore->direita = rotacao_D(subarvore->direita);
+        subarvore = rotacao_E(subarvore);
     }
     
-    return arvore;
+    return subarvore;
 }
 
-Arvore * limparSubarvore(Arvore * subarvore) {
-    if (subarvore->esquerda != NULL) {
-        subarvore->esquerda =  limparArvore(subarvore->esquerda);
+NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore) {
+    // Limpa a subárvore
+
+    if (subarvore != NULL) {
+        // Se houver uma subárvore filha à esquerda, chama a função recursivamente para ela até a última folha;
+        if (subarvore->esquerda != NULL) {
+            subarvore->esquerda =  limparSubarvore(subarvore->esquerda);
+        }
+
+        // Se houver uma subárvore filha à direita, chama a função recursivamente para ela até a última folha;
+        if (subarvore->direita != NULL) {
+            subarvore->direita = limparSubarvore(subarvore->direita);
+        }
+
+        // Libera o espaço em memória que estava sendo utilizado pelo nó
+        free(subarvore);
+
+        // Uma vez que o valor foi retirado, faz com que o ponteiro do nó pai, que chamou a função, aponte para NULL
+        return NULL;
+
+    } else {
+        printf("Nenhum elemento encontrado na subárvore");
+        return NULL;
     }
-    if (subarvore->direita != NULL) {
-        subarvore->direita = limparArvore(subarvore->direita);
-    }
-    free(subraiz);
-    return NULL;
 }
+
+
+void exibirTodosProdutos(NO_DE_ARVORE* raiz){
+    // Imprime todos os produtos cadastrados na árvore, de forma pré-fixa;
+
+    if (raiz != NULL) {
+        exibirProduto(raiz->produto);
+        printf("--------------------\n\n");
+        exibirTodosProdutos(raiz->esquerda);
+        exibirTodosProdutos(raiz->direita);
+    } else {
+        printf("Subárvore vazia");
+    }
+}
+
+
+void imprimePrefixa (NO_DE_ARVORE * noDeArvore) {
+    if (noDeArvore != NULL) {
+        // Imprime o código do produto
+        printf("%i", noDeArvore->produto.codigo);
+
+        // Chama a função para o filho à esquerda, se houver
+        if (noDeArvore->esquerda != NULL) {
+            printf(" ");
+            imprimePrefixa(noDeArvore->esquerda);
+        }
+
+        // Chama a função para o filho à direita, se houver
+        if (noDeArvore->direita != NULL) {
+            printf(" ");
+            imprimePrefixa(noDeArvore->direita);
+        }
+    } else {
+        printf("Subárvore vazia");
+    }
+}
+
+void imprimeInfixa (NO_DE_ARVORE * noDeArvore) {
+    if (noDeArvore != NULL) {
+        // Chama a função para o filho à esquerda, se houver
+        if (noDeArvore->esquerda != NULL) {
+            imprimeInfixa(noDeArvore->esquerda);
+            printf(" ");
+        }
+
+        // Imprime o código do produto
+        printf("%lu", noDeArvore->produto.codigo);
+
+        // Chama a função para o filho à direita, se houver
+        if (noDeArvore->direita != NULL) {
+            printf(" ");
+            imprimeInfixa(noDeArvore->direita);
+        }
+    } else {
+        printf("Subárvore vazia");
+    }
+}
+
+void imprimePosfixa (NO_DE_ARVORE * noDeArvore) {
+    if (noDeArvore != NULL) {
+        // Chama a função para o filho à esquerda, se houver
+        if (noDeArvore->esquerda != NULL) {
+            imprimePosfixa(noDeArvore->esquerda);
+            printf(" ");
+        }
+
+        // Chama a função para o filho à direita, se houver
+        if (noDeArvore->direita != NULL) {
+            imprimePosfixa(noDeArvore->direita);
+            printf(" ");
+        }
+
+        // Imprime o código do produto
+        printf("%lu", noDeArvore->produto.codigo);
+    } else {
+        printf("Subárvore vazia");
+    }
+}
+
+NO_DE_ARVORE * buscarElemento (NO_DE_ARVORE * raiz, long unsigned int codigo) {
+    // Se a função percorrer as subárvores de forma recursiva até chegar à última folha sem encontrar, retorna NULL
+    if (raiz == NULL) {
+        return NULL;
+    } else {
+        // Se o produto for encontrado, retorna o endereço do nó que este ocupa na árvore
+        if (raiz->produto.codigo == codigo) {
+            return raiz;
+
+        // Procura nas subárvores à esquerda, caso o código buscado seja menor que o do elemento atual
+        } else if (codigo < raiz->produto.codigo) {
+            return buscarElemento (raiz->esquerda, codigo);
+
+        // Procura nas subárvores à direita, caso o código buscado seja maior que o do elemento atual
+        } else {
+            return buscarElemento (raiz->direita, codigo);
+        }
+    }
+}
+
