@@ -30,6 +30,7 @@ void imprimeInfixa(NO_DE_ARVORE *raiz);
 void imprimePosfixa(NO_DE_ARVORE *raiz);
 
 NO_DE_ARVORE * buscarElemento(NO_DE_ARVORE * raiz, unsigned long long int codigo);
+NO_DE_ARVORE * removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo);
 NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore);
 
 void adicionarAFila(ELEMENTO_DE_FILA * cabecaDaFila, NO_DE_ARVORE * noDeArvore);

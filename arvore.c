@@ -8,7 +8,7 @@ NO_DE_ARVORE* inserirProduto(NO_DE_ARVORE* raiz, PRODUTO produto){
 
     // Se a função alcançar NULL após ser apontada pelo nó anterior, cria um novo nó filho e o retorna para a função anterior;
     if (raiz == NULL) {
-        NO_DE_ARVORE* novoNo = (NO_DE_ARVORE*)malloc(sizeof(NO_DE_ARVORE));
+        NO_DE_ARVORE* novoNo = (NO_DE_ARVORE*)malloc(sizeof(NO_DE_ARVORE)); // aloca memoria para o nó da arvore
         novoNo->produto = produto;
         novoNo->esquerda = NULL;
         novoNo->direita = NULL;
@@ -111,8 +111,32 @@ NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore) {
         return NULL;
 
     } else {
-        printf("Nenhum elemento encontrado na subárvore");
+        printf("Nenhum elemento encontrado na subarvore");
         return NULL;
+    }
+}
+
+NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo){
+    if(raiz == NULL){
+        printf("\nProduto nao encontrado!\n\n");
+        return NULL;
+    }else{
+        // procura o codigo para remover
+        if(raiz->produto.codigo == codigo){
+            // remove nos folhas(nos sem filho)
+            if(raiz->esquerda == NULL && raiz->direita == NULL){
+                free(raiz);
+                printf("Produto com o codigo '%llu' foi removido com sucesso!\n\n", codigo);
+                return NULL;
+            }
+        }else{
+            if(codigo < raiz->produto.codigo){
+                raiz->esquerda = removerProduto(raiz->esquerda, codigo);
+            }else{
+                raiz->direita = removerProduto(raiz->direita, codigo);
+            }
+            return raiz;
+        }
     }
 }
 
@@ -130,13 +154,24 @@ void exibirTodosProdutos(NO_DE_ARVORE* raiz){
             exibirTodosProdutos(raiz->direita);
         }
     } else {
-        printf("Subárvore vazia");
+        printf("Subarvore vazia");
     }
 }
 
+// NO_DE_ARVORE * exibirTodosProdutos(NO_DE_ARVORE* raiz){
+//     // Imprime todos os produtos cadastrados na árvore, de forma pré-fixa;
+//     if (raiz != NULL){
+//         exibirProduto(raiz->produto);
+//         printf("--------------------\n\n");
+//         exibirTodosProdutos(raiz->esquerda);
+//         exibirTodosProdutos(raiz->direita);
+//     }    
+// }
 
 void imprimePrefixa (NO_DE_ARVORE * noDeArvore) {
-    if (noDeArvore != NULL) {
+    if(noDeArvore == NULL){
+        printf("Subarvore vazia");
+    }else{
         // Imprime o código do produto
         printf("%i", noDeArvore->produto.codigo);
 
@@ -151,13 +186,13 @@ void imprimePrefixa (NO_DE_ARVORE * noDeArvore) {
             printf(" ");
             imprimePrefixa(noDeArvore->direita);
         }
-    } else {
-        printf("Subárvore vazia");
     }
 }
 
 void imprimeInfixa (NO_DE_ARVORE * noDeArvore) {
-    if (noDeArvore != NULL) {
+    if(noDeArvore == NULL){
+        printf("Subarvore vazia");
+    }else{
         // Chama a função para o filho à esquerda, se houver
         if (noDeArvore->esquerda != NULL) {
             imprimeInfixa(noDeArvore->esquerda);
@@ -172,13 +207,13 @@ void imprimeInfixa (NO_DE_ARVORE * noDeArvore) {
             printf(" ");
             imprimeInfixa(noDeArvore->direita);
         }
-    } else {
-        printf("Subárvore vazia");
     }
 }
 
 void imprimePosfixa (NO_DE_ARVORE * noDeArvore) {
-    if (noDeArvore != NULL) {
+   if(noDeArvore == NULL){
+        printf("Subarvore vazia");
+    }else{
         // Chama a função para o filho à esquerda, se houver
         if (noDeArvore->esquerda != NULL) {
             imprimePosfixa(noDeArvore->esquerda);
