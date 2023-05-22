@@ -116,7 +116,7 @@ NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore) {
     }
 }
 
-NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, long unsigned int codigo){
+NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo){
     if(raiz == NULL){
         printf("\nProduto nao encontrado!\n\n");
         return NULL;
@@ -126,7 +126,7 @@ NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, long unsigned int codigo){
             // remove nos folhas(nos sem filho)
             if(raiz->esquerda == NULL && raiz->direita == NULL){
                 free(raiz);
-                printf("Produto com o codigo '%lu' foi removido com sucesso!\n\n", codigo);
+                printf("Produto com o codigo '%llu' foi removido com sucesso!\n\n", codigo);
                 return NULL;
             }
         }else{
@@ -147,8 +147,12 @@ void exibirTodosProdutos(NO_DE_ARVORE* raiz){
     if (raiz != NULL) {
         exibirProduto(raiz->produto);
         printf("--------------------\n\n");
-        exibirTodosProdutos(raiz->esquerda);
-        exibirTodosProdutos(raiz->direita);
+        if (raiz->esquerda != NULL) {
+            exibirTodosProdutos(raiz->esquerda);
+        }
+        if (raiz->direita != NULL) {
+            exibirTodosProdutos(raiz->direita);
+        }
     } else {
         printf("Subarvore vazia");
     }
@@ -196,7 +200,7 @@ void imprimeInfixa (NO_DE_ARVORE * noDeArvore) {
         }
 
         // Imprime o código do produto
-        printf("%lu", noDeArvore->produto.codigo);
+        printf("%llu", noDeArvore->produto.codigo);
 
         // Chama a função para o filho à direita, se houver
         if (noDeArvore->direita != NULL) {
@@ -223,11 +227,13 @@ void imprimePosfixa (NO_DE_ARVORE * noDeArvore) {
         }
 
         // Imprime o código do produto
-        printf("%lu", noDeArvore->produto.codigo);
-    } 
+        printf("%llu", noDeArvore->produto.codigo);
+    } else {
+        printf("Subárvore vazia");
+    }
 }
 
-NO_DE_ARVORE * buscarElemento (NO_DE_ARVORE * raiz, long unsigned int codigo) {
+NO_DE_ARVORE * buscarElemento (NO_DE_ARVORE * raiz, unsigned long long int codigo) {
     // Se a função percorrer as subárvores de forma recursiva até chegar à última folha sem encontrar, retorna NULL
     if (raiz == NULL) {
         return NULL;
@@ -244,5 +250,115 @@ NO_DE_ARVORE * buscarElemento (NO_DE_ARVORE * raiz, long unsigned int codigo) {
         } else {
             return buscarElemento (raiz->direita, codigo);
         }
+    }
+}
+
+void adicionarAFila (ELEMENTO_DE_FILA * cabecaDaFila, NO_DE_ARVORE * noDeArvore) {
+    // Adiciona um novo elemento à fila
+
+    // Quando na última posição, adiciona um novo elemento
+    if (cabecaDaFila->proximo == NULL) {
+        // Aloca memória para um novo elemento
+        ELEMENTO_DE_FILA * new = (ELEMENTO_DE_FILA *) malloc(sizeof(ELEMENTO_DE_FILA));
+
+        // Adiciona o nó de árvore ao elemento
+        new->noDeArvore = noDeArvore;
+
+        // O fim da fila aponta para NULL
+        new->proximo = NULL;
+
+        // O que antes era o último elemento aponta para o novo elemento
+        cabecaDaFila->proximo = new;
+    } else {
+
+        // Tenta executar a função no próximo elemento, até encontrar a última posição
+        adicionarAFila(cabecaDaFila->proximo, noDeArvore);
+    }
+}
+
+void dadosParaArquivo(NO_DE_ARVORE * raiz) {
+    char nome_entrada[500], nome_arquivo[505];
+    printf("Digite o caminho do arquivo, sem extensão: ");
+    scanf("%[^\n]", nome_entrada);
+    getchar();
+
+    // Adiciona extensão txt no arquivo
+    sprintf(nome_arquivo, "%s.txt", nome_entrada);
+
+    // Instancia uma fila iniciando no na raiz da árvore
+    ELEMENTO_DE_FILA * cabecaDeFila = (ELEMENTO_DE_FILA *) malloc(sizeof(ELEMENTO_DE_FILA));
+    cabecaDeFila->noDeArvore = raiz;
+    cabecaDeFila->proximo = NULL;
+
+    // Posiciona o cursor no primeiro elemento da fila
+    ELEMENTO_DE_FILA * atual = cabecaDeFila;
+
+    // Abre o arquivo para escrever os dados da árvore
+    FILE * arquivo = fopen(nome_arquivo, "w");
+
+    // Se o arquivo abrir com sucesso
+    if (arquivo != NULL) {
+
+        // Percorre a fila até o último elemento - Adicionando os elementos em cada nível da árvore
+        while (atual != NULL) {
+            // Escreve dados de um produto no arquivo
+            fprintf(arquivo, "%llu\n%s\n%f\n%i\n",
+                    atual->noDeArvore->produto.codigo,
+                    atual->noDeArvore->produto.nome,
+                    atual->noDeArvore->produto.preco,
+                    atual->noDeArvore->produto.estoque
+            );
+
+            // Adiciona os nós filhos ao fim da lista
+            if (atual->noDeArvore->esquerda != NULL) {
+                adicionarAFila(cabecaDeFila, atual->noDeArvore->esquerda);
+            }
+            if (atual->noDeArvore->direita != NULL) {
+                adicionarAFila(cabecaDeFila, atual->noDeArvore->direita);
+            }
+
+            // Move o cursor para o próximo elemento na lista
+            atual = atual->proximo;
+        }
+
+        // Fecha o arquivo
+        fclose(arquivo);
+    } else {
+        printf("Erro ao abrir arquivo");
+    }
+}
+
+NO_DE_ARVORE * dadosDoArquivo(NO_DE_ARVORE * raiz) {
+    char nome_entrada[200], nome_arquivo[205];
+    PRODUTO novoProduto;
+
+    printf("Digite o caminho do arquivo, sem extensão: ");
+    scanf("%[^\n]", nome_entrada);
+    getchar();
+
+    // Adiciona extensão .txt no arquivo
+    sprintf(nome_arquivo, "%s.txt", nome_entrada);
+
+    // Abre o arquivo para leitura
+    FILE * arquivo = fopen(nome_arquivo, "r");
+
+    // Caso o arquivo seja aberto com sucesso
+    if (arquivo != NULL) {
+
+        // Lê os dados de um produto e o adiciona à arvore
+        while (fscanf(arquivo, "%llu\n%[^\n]\n%f\n%i\n",
+                      &novoProduto.codigo,
+                      novoProduto.nome,
+                      &novoProduto.preco,
+                      &novoProduto.estoque) != EOF) {
+            raiz = inserirProduto(raiz, novoProduto);
+        }
+
+        // Fecha o arquivo
+        fclose(arquivo);
+
+        return raiz;
+    } else {
+        printf("Erro ao abrir arquivo");
     }
 }

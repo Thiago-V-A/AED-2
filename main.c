@@ -4,7 +4,8 @@
 
 int main () {
     unsigned int option;
-    long unsigned int codigoABuscar, codigoARemover;
+    long long unsigned int codigoABuscar, codigoARemover;
+
     PRODUTO novoProduto;
     NO_DE_ARVORE * elementoBuscado;
     NO_DE_ARVORE * elementoRemovido;
@@ -88,6 +89,20 @@ int main () {
                     printf("\nAltura da arvore: %li\n\n", verificarAltura(raiz));
                 } else {
                     printf("\nA arvore ainda nao foi inicializada\n");
+                }
+                break;
+
+            // Importar de arquivo
+            case 10:
+                raiz = dadosDoArquivo(raiz);
+                break;
+
+            // Exportar para arquivo
+            case 11:
+                if (raiz != NULL) {
+                    dadosParaArquivo(raiz);
+                } else {
+                    printf("\nA arvore ainda não foi inicializada\n");
                 }
                 break;
 
