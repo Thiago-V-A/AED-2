@@ -24,8 +24,8 @@ PRODUTO coletarDadosDoProduto() {
 }
 
 void exibirProduto(PRODUTO produto) {
-    printf("Codigo: %d\n", produto.codigo);
-    printf("Nome: %s", produto.nome);
+    printf("\nCodigo: %d\n", produto.codigo);
+    printf("Nome: %s\n", produto.nome);
     printf("Preco: %.2f\n", produto.preco);
     printf("Quantidade: %d\n", produto.estoque);
 }

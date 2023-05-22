@@ -4,9 +4,10 @@
 
 int main () {
     unsigned int option;
-    long unsigned int codigoABuscar;
+    long unsigned int codigoABuscar, codigoARemover;
     PRODUTO novoProduto;
     NO_DE_ARVORE * elementoBuscado;
+    NO_DE_ARVORE * elementoRemovido;
     NO_DE_ARVORE * raiz = NULL;
 
     do {
@@ -21,16 +22,20 @@ int main () {
 
             // Remover produto
             case 2:
+                printf("Digite o codigo do produto a ser removido: ");
+                scanf("%lu", &codigoARemover);
+                getchar();
+                removerProduto(raiz, codigoARemover);
                 break;
 
             // Buscar produto
             case 3:
-                printf("\nDigite o código a ser buscado: ");
+                printf("\nDigite o codigo a ser buscado: ");
                 scanf("%lu", &codigoABuscar);
                 getchar();
                 elementoBuscado = buscarElemento(raiz, codigoABuscar);
                 if (elementoBuscado == NULL) {
-                    printf("\nProduto não encontrado\n\n");
+                    printf("\nProduto nao encontrado\n\n");
 
                 } else {
                     printf("\nElemento encontrado\n");
@@ -42,9 +47,17 @@ int main () {
 
             // Mostrar todos os produtos
             case 4:
-                exibirTodosProdutos(raiz);
+              exibirTodosProdutos(raiz);
                 printf("\n");
                 break;
+                // exibir=exibirTodosProdutos(raiz);
+                // if(exibir == NULL){
+                //     printf("Subarvore vazia\n");
+                // }else{
+                //     exibirTodosProdutos(raiz);
+                // }
+                // printf("\n");
+                // break;
 
             // Limpar/reinicializar árvore
             case 5:
@@ -72,9 +85,9 @@ int main () {
             // Altura da árvore
             case 9:
                 if (raiz != NULL) {
-                    printf("\nAltura da árvore: %li\n\n", verificarAltura(raiz));
+                    printf("\nAltura da arvore: %li\n\n", verificarAltura(raiz));
                 } else {
-                    printf("\nA arvore ainda não foi inicializada\n");
+                    printf("\nA arvore ainda nao foi inicializada\n");
                 }
                 break;
 

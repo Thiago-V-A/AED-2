@@ -25,6 +25,7 @@ void imprimeInfixa(NO_DE_ARVORE *raiz);
 void imprimePosfixa(NO_DE_ARVORE *raiz);
 
 NO_DE_ARVORE * buscarElemento(NO_DE_ARVORE * raiz, long unsigned int codigo);
+NO_DE_ARVORE * removerProduto(NO_DE_ARVORE* raiz, long unsigned int codigo);
 NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore);
 
 #endif //AED_2_ARVORE_H
