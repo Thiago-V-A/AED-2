@@ -5,7 +5,7 @@ PRODUTO coletarDadosDoProduto() {
     PRODUTO novoProduto;
 
     printf("Insira o codigo do produto:\n");
-    scanf("%lu", &novoProduto.codigo);
+    scanf("%llu", &novoProduto.codigo);
     getchar();
 
     printf("Insira a quantidade do produto a ser adicionada:\n");
@@ -24,8 +24,8 @@ PRODUTO coletarDadosDoProduto() {
 }
 
 void exibirProduto(PRODUTO produto) {
-    printf("Codigo: %d\n", produto.codigo);
-    printf("Nome: %s", produto.nome);
+    printf("Codigo: %llu\n", produto.codigo);
+    printf("Nome: %s\n", produto.nome);
     printf("Preco: %.2f\n", produto.preco);
     printf("Quantidade: %d\n", produto.estoque);
 }
