@@ -24,7 +24,7 @@ int main () {
             // Remover produto
             case 2:
                 printf("Digite o codigo do produto a ser removido: ");
-                scanf("%lu", &codigoARemover);
+                scanf("%llu", &codigoARemover);
                 getchar();
                 removerProduto(raiz, codigoARemover);
                 break;
@@ -32,7 +32,7 @@ int main () {
             // Buscar produto
             case 3:
                 printf("\nDigite o codigo a ser buscado: ");
-                scanf("%lu", &codigoABuscar);
+                scanf("%llu", &codigoABuscar);
                 getchar();
                 elementoBuscado = buscarElemento(raiz, codigoABuscar);
                 if (elementoBuscado == NULL) {
