@@ -36,5 +36,6 @@ NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore);
 void adicionarAFila(ELEMENTO_DE_FILA * cabecaDaFila, NO_DE_ARVORE * noDeArvore);
 void dadosParaArquivo(NO_DE_ARVORE * raiz);
 NO_DE_ARVORE * dadosDoArquivo(NO_DE_ARVORE * raiz);
+NO_DE_ARVORE * removerPorLista(NO_DE_ARVORE * raiz);
 
 #endif //AED_2_ARVORE_H

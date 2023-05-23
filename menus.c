@@ -4,6 +4,7 @@
 
 unsigned int menuPrincipal(){
     unsigned int option;
+    printf("MENU PRINCIPAL\n\n");
 
     printf("1 - Cadastrar novo PRODUTO\n");
     printf("2 - Remove PRODUTO\n");
@@ -16,13 +17,14 @@ unsigned int menuPrincipal(){
     printf("9 - Imprime altura da árvore\n");
     printf("10 - Importar árvore de arquivo\n");
     printf("11 - Exportar árvore para arquivo\n");
+    printf("12 - Excluir produtos a partir de uma lista\n");
     printf("0 - Sair\n\n");
     printf("Entre com a opcao desejada: ");
     scanf("%u", &option);
     getchar();
 
     // Caso a opção seja inválida, continua pedindo uma entrada ao usuário
-    while ((option < 0) || (option > 11)) {
+    while ((option < 0) || (option > 12)) {
         printf("\nEntre com uma opção válida: ");
         scanf("%u", &option);
         getchar();

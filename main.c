@@ -1,6 +1,15 @@
 #include "arvore.c"
 #include "menus.c"
 
+#define enter_para_retornar() {printf("\nPressione ENTER para retornar ou sair."); getchar(); }
+
+#ifdef __linux__
+#define clear_screen() system("clear")
+#endif
+
+#ifdef _WIN32
+#define clear_screen() system("cls")
+#endif
 
 int main () {
     unsigned int option;
@@ -12,6 +21,7 @@ int main () {
     NO_DE_ARVORE * raiz = NULL;
 
     do {
+        clear_screen();
         option = menuPrincipal();
 
         switch (option) {
@@ -48,17 +58,9 @@ int main () {
 
             // Mostrar todos os produtos
             case 4:
-              exibirTodosProdutos(raiz);
+                exibirTodosProdutos(raiz);
                 printf("\n");
                 break;
-                // exibir=exibirTodosProdutos(raiz);
-                // if(exibir == NULL){
-                //     printf("Subarvore vazia\n");
-                // }else{
-                //     exibirTodosProdutos(raiz);
-                // }
-                // printf("\n");
-                // break;
 
             // Limpar/reinicializar árvore
             case 5:
@@ -106,11 +108,20 @@ int main () {
                 }
                 break;
 
+            case 12:
+                if (raiz != NULL) {
+                    raiz = removerPorLista(raiz);
+                } else {
+                    printf("\nA arvore ainda não foi inicializada\n");
+                }
+                break;
+
             // Sair
             case 0:
                 break;
         }
 
+        enter_para_retornar();
 
     } while (option != 0);
 

@@ -131,7 +131,7 @@ NO_DE_ARVORE * cataMaior(NO_DE_ARVORE * subArvore) {
 NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo){
      NO_DE_ARVORE * substituto;
 	if (!raiz){
-		printf("\nProduto nao encontrado!\n\n");
+		printf("\nProduto %llu nao encontrado!", codigo);
 		return NULL;
 	}
 	else if (raiz->produto.codigo > codigo){
@@ -158,8 +158,6 @@ NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo){
 	}
 
 	return raiz;
-    
-    
 }
 
 
@@ -168,7 +166,7 @@ void exibirTodosProdutos(NO_DE_ARVORE* raiz){
 
     if (raiz != NULL) {
         exibirProduto(raiz->produto);
-        printf("--------------------\n\n");
+        printf("\n--------------------\n");
         if (raiz->esquerda != NULL) {
             exibirTodosProdutos(raiz->esquerda);
         }
@@ -364,6 +362,7 @@ NO_DE_ARVORE * dadosDoArquivo(NO_DE_ARVORE * raiz) {
 
     // Caso o arquivo seja aberto com sucesso
     if (arquivo != NULL) {
+        printf("Arquivo encontrado, iniciando importacao");
 
         // Lê os dados de um produto e o adiciona à arvore
         while (fscanf(arquivo, "%llu\n%[^\n]\n%f\n%i\n",
@@ -376,9 +375,42 @@ NO_DE_ARVORE * dadosDoArquivo(NO_DE_ARVORE * raiz) {
 
         // Fecha o arquivo
         fclose(arquivo);
+        printf("Importacao concluida");
 
-        return raiz;
     } else {
         printf("Erro ao abrir arquivo");
     }
+    return raiz;
+}
+
+NO_DE_ARVORE * removerPorLista(NO_DE_ARVORE * raiz) {
+    char nome_entrada[200], nome_arquivo[205];
+    unsigned long long int codigo;
+
+    printf("Digite o caminho do arquivo, sem extensão: ");
+    scanf("%[^\n]", nome_entrada);
+    getchar();
+
+    // Adiciona extensão .txt no arquivo
+    sprintf(nome_arquivo, "%s.txt", nome_entrada);
+
+    // Abre o arquivo para leitura
+    FILE * arquivo = fopen(nome_arquivo, "r");
+
+    // Caso o arquivo seja aberto com sucesso
+    if (arquivo != NULL) {
+        printf("Arquivo encontrado. Iniciando exclusoes.");
+        // Lê o código de um produto e o remove da árvore
+        while (fscanf(arquivo, "%llu\n", &codigo) != EOF) {
+            raiz = removerProduto(raiz, codigo);
+        }
+
+        // Fecha o arquivo
+        fclose(arquivo);
+        printf("Exclusões concluídas");
+
+    } else {
+        printf("Erro ao abrir arquivo");
+    }
+    return raiz;
 }
