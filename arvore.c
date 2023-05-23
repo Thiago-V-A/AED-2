@@ -142,7 +142,7 @@ NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo){
 	}
 	else if (raiz->esquerda && raiz->direita){
 		substituto = cataMaior(raiz->esquerda);
-		raiz->produto.codigo = substituto->produto.codigo;
+		raiz->produto = substituto->produto;
 		raiz->esquerda = removerProduto(raiz->esquerda, raiz->produto.codigo);
 	}
 	else
