@@ -211,7 +211,7 @@ void imprimeInfixa (NO_DE_ARVORE * noDeArvore) {
 }
 
 void imprimePosfixa (NO_DE_ARVORE * noDeArvore) {
-   if(noDeArvore == NULL){
+    if(noDeArvore == NULL){
         printf("Subarvore vazia");
     }else{
         // Chama a função para o filho à esquerda, se houver
@@ -228,8 +228,6 @@ void imprimePosfixa (NO_DE_ARVORE * noDeArvore) {
 
         // Imprime o código do produto
         printf("%llu", noDeArvore->produto.codigo);
-    } else {
-        printf("Subárvore vazia");
     }
 }
 
