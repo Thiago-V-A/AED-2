@@ -116,28 +116,50 @@ NO_DE_ARVORE * limparSubarvore(NO_DE_ARVORE * subarvore) {
     }
 }
 
+NO_DE_ARVORE * cataMaior(NO_DE_ARVORE * subArvore) {
+	if(!subArvore){
+		return NULL;
+	}
+	else if (!subArvore->direita){
+		return subArvore;
+	}
+	else{
+		return cataMaior(subArvore->direita);
+	}
+}
+
 NO_DE_ARVORE* removerProduto(NO_DE_ARVORE* raiz, unsigned long long int codigo){
-    if(raiz == NULL){
-        printf("\nProduto nao encontrado!\n\n");
-        return NULL;
-    }else{
-        // procura o codigo para remover
-        if(raiz->produto.codigo == codigo){
-            // remove nos folhas(nos sem filho)
-            if(raiz->esquerda == NULL && raiz->direita == NULL){
-                free(raiz);
-                printf("Produto com o codigo '%llu' foi removido com sucesso!\n\n", codigo);
-                return NULL;
-            }
-        }else{
-            if(codigo < raiz->produto.codigo){
-                raiz->esquerda = removerProduto(raiz->esquerda, codigo);
-            }else{
-                raiz->direita = removerProduto(raiz->direita, codigo);
-            }
-            return raiz;
+     NO_DE_ARVORE * substituto;
+	if (!raiz){
+		printf("\nProduto nao encontrado!\n\n");
+		return NULL;
+	}
+	else if (raiz->produto.codigo > codigo){
+		raiz->esquerda = removerProduto(raiz->esquerda, codigo);
+	}
+	else if (raiz->produto.codigo < codigo){
+		raiz->direita = removerProduto(raiz->direita, codigo);
+	}
+	else if (raiz->esquerda && raiz->direita){
+		substituto = cataMaior(raiz->esquerda);
+		raiz->produto.codigo = substituto->produto.codigo;
+		raiz->esquerda = removerProduto(raiz->esquerda, raiz->produto.codigo);
+	}
+	else
+	{
+		substituto = raiz;
+		if (!raiz->esquerda){
+			raiz = raiz->direita;
         }
-    }
+		else if (!raiz->direita){
+			raiz = raiz->esquerda;
+        }
+		free(substituto);
+	}
+
+	return raiz;
+    
+    
 }
 
 
@@ -173,7 +195,7 @@ void imprimePrefixa (NO_DE_ARVORE * noDeArvore) {
         printf("Subarvore vazia");
     }else{
         // Imprime o código do produto
-        printf("%i", noDeArvore->produto.codigo);
+        printf("%llu", noDeArvore->produto.codigo);
 
         // Chama a função para o filho à esquerda, se houver
         if (noDeArvore->esquerda != NULL) {
